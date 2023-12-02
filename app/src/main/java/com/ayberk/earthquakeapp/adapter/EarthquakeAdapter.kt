@@ -29,13 +29,11 @@ class EarthquakeAdapter: RecyclerView.Adapter<EarthquakeAdapter.Earthquakes>(){
             val formattedDate = dayMonthYearFormatter.format(dateObject)
 
             binding.txtMag.text = data.mag.toString()
-            binding.txtCityName.text = data.location_properties.closestCities[0].name
-            binding.txtCityCode.text = data.location_properties.closestCities[0].cityCode.toString()
+            binding.txtCityName.text = data.location_properties.epiCenter.name
+            binding.txtCityCode.text = data.location_properties.epiCenter.cityCode.toString()
             binding.txtDate.text = "Tarih: $formattedDate"
             binding.txtTime.text = "Saat: ${SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(dateObject)}"
             binding.txtTitle.text = data.title
-
-
 
         }
     }
