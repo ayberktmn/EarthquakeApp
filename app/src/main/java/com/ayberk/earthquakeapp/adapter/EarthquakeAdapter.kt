@@ -2,7 +2,11 @@ package com.ayberk.earthquakeapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.ayberk.earthquakeapp.HomeFragmentDirections
+import com.ayberk.earthquakeapp.R
 import com.ayberk.earthquakeapp.databinding.EarthquakeItemBinding
 import com.ayberk.earthquakeapp.model.Result
 import java.text.SimpleDateFormat
@@ -40,6 +44,12 @@ class EarthquakeAdapter: RecyclerView.Adapter<EarthquakeAdapter.Earthquakes>(){
 
     override fun onBindViewHolder(holder: Earthquakes, position: Int) {
         livedata?.let {
+            val card = holder.itemView.findViewById<CardView>(R.id.EarthquakeCard)
+            card.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(position)
+                holder.itemView.findNavController().navigate(action)
+                println("id: $action")
+            }
             holder.bind(it[position])
         }
     }
