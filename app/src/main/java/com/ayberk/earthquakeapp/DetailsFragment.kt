@@ -81,6 +81,10 @@ class DetailsFragment : Fragment() {
                         handler.postDelayed({
                             stopBlinking()
                         }, 5000)
+                        binding.txtDetailDepth.text = resultList.depth.toString()
+                        binding.txtDetailLocation.text = resultList.geojson.coordinates.joinToString(separator = "\n")
+
+
                     }
                 } else {
                     binding.txtDetailTitle.text = "Error!"
