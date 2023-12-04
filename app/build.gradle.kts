@@ -5,6 +5,8 @@ plugins {
     id ("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs")
     id ("kotlin-parcelize")
+    id("com.huawei.agconnect")
+
 }
 
 android {
@@ -21,6 +23,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file ("anahtarearthquake.jks")
+            keyAlias = "key"
+            keyPassword = "123456"
+            storePassword = "123456"
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -28,6 +42,27 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            packagingOptions{
+                doNotStrip ("*/arm64-v8a/libucs-credential.so")
+                doNotStrip ("*/armeabi-v7a/libucs-credential.so")
+                // If the CPU architecture is x86, add the following configuration:
+                doNotStrip ("*/x86/libucs-credential.so")
+                doNotStrip ("*/x86_64/libucs-credential.so")
+                exclude ("lib/x86/libucs-credential.so")
+                // Exclude the SO file on which the x86_64 platform depends.
+                exclude ("lib/x86_64/libucs-credential.so")
+            }
         }
     }
     compileOptions {
@@ -80,5 +115,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     implementation("androidx.hilt:hilt-navigation-fragment:1.1.0")
+
+    implementation ("com.huawei.hms:location:6.12.0.300")
+    implementation ("com.huawei.hms:maps:6.11.2.301")
+    implementation ("com.huawei.agconnect:agconnect-core:1.9.1.300")
 
 }

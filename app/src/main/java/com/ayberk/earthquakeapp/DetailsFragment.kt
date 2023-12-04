@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.ayberk.earthquakeapp.databinding.FragmentDetailsBinding
 import com.ayberk.earthquakeapp.model.Earthquake
 import com.ayberk.earthquakeapp.model.Result
@@ -85,6 +86,16 @@ class DetailsFragment : Fragment() {
                         binding.txtDetailLocation.text = resultList.geojson.coordinates.joinToString(separator = "\n")
 
 
+                        binding.imgLocation.setOnClickListener {
+                            val coordinates = floatArrayOf(
+                            resultList.geojson.coordinates[0].toFloat(),
+                            resultList.geojson.coordinates[1].toFloat()
+                        )
+                            stopBlinking()
+                            val locationId = DetailsFragmentDirections.actionDetailsFragmentToMapFragment(coordinates)
+                            findNavController().navigate(locationId)
+                            println("kordinatlar:${coordinates[0]}, ${coordinates[1]}")
+                        }
                     }
                 } else {
                     binding.txtDetailTitle.text = "Error!"
@@ -130,14 +141,6 @@ class DetailsFragment : Fragment() {
         } else {
             textView.visibility = View.VISIBLE
         }
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Stop blinking when the view is destroyed
-        stopBlinking()
-
-        _binding = null
     }
 }
 
