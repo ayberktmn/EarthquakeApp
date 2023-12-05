@@ -50,11 +50,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private var currentMarker: Marker? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MapsInitializer.initialize(requireContext())
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,7 +63,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val mapViewBundle: Bundle? = null
         var mSupportMapFragment: SupportMapFragment? = null
-        mSupportMapFragment = childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
+        mSupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment?
         mSupportMapFragment?.getMapAsync(this@MapFragment)
         mMapView = view.findViewById(R.id.mapView)
 
@@ -88,16 +89,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val mLocationRequest = LocationRequest()
         mLocationRequest.interval = 180000
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
 
-       Toast.makeText(context,"Konumunuz Bulunuyor",Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Konumunuz Bulunuyor", Toast.LENGTH_SHORT).show()
 
         val mLocationCallback: LocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 val lastLocation = locationResult.lastLocation
                 val currentLatitude = lastLocation.latitude
                 val currentLongitude = lastLocation.longitude
-              //  println("Latitude: $currentLatitude, Longitude: $currentLongitude")
+                //  println("Latitude: $currentLatitude, Longitude: $currentLongitude")
 
                 // Haritaya marker ekleme
                 addMarker()
@@ -129,9 +131,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .snippet("${longitude}, ${latitude}")
 
         // Haritaya ekle
-       currentMarker = hMap?.addMarker(markerOptions)
+        currentMarker = hMap?.addMarker(markerOptions)
 
-        Toast.makeText(context,"Deprem Bölgesi Yükleniyor...",Toast.LENGTH_SHORT).show()
+        val cameraUpdate = CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15f)
+        hMap?.moveCamera(cameraUpdate)
+
+        Toast.makeText(context, "Deprem Bölgesi Yükleniyor...", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -142,7 +147,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
 
         val missingPermissions = permissions.filter {
-            ContextCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                it
+            ) != PackageManager.PERMISSION_GRANTED
         }.toTypedArray()
 
         if (missingPermissions.isNotEmpty()) {
@@ -172,7 +180,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    @RequiresPermission(allOf = [ACCESS_FINE_LOCATION,ACCESS_WIFI_STATE])
+    @RequiresPermission(allOf = [ACCESS_FINE_LOCATION, ACCESS_WIFI_STATE])
     override fun onMapReady(map: HuaweiMap) {
         hMap = map
         hMap!!.isMyLocationEnabled = true
@@ -180,6 +188,30 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Toast.makeText(requireContext(), "Harita Yükleniyor...", Toast.LENGTH_SHORT).show()
         hMap!!.uiSettings.isMyLocationButtonEnabled = true
 
+    }
+    override fun onStart() {
+        super.onStart()
+        mMapView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mMapView?.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMapView?.onDestroy()
+    }
+
+    override fun onPause() {
+        mMapView?.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mMapView?.onResume()
 
     }
 }

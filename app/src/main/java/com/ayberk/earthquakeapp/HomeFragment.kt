@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ayberk.earthquakeapp.adapter.EarthquakeAdapter
 import com.ayberk.earthquakeapp.databinding.FragmentHomeBinding
 import com.ayberk.earthquakeapp.viewmodel.EarthquakeViewModel
+import com.huawei.hms.maps.MapView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ class HomeFragment : Fragment() {
     private var isBackPressed = false
     private lateinit var adapter: EarthquakeAdapter
     private val viewModel : EarthquakeViewModel by viewModels()
+    private var mMapView: MapView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,5 +66,7 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        mMapView?.onDestroy()
     }
+
 }

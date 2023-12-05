@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.postDelayed
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -84,6 +86,11 @@ class DetailsFragment : Fragment() {
                         }, 5000)
                         binding.txtDetailDepth.text = resultList.depth.toString()
                         binding.txtDetailLocation.text = resultList.geojson.coordinates.joinToString(separator = "\n")
+                        binding.txtlocationprop.text = resultList.location_properties.closestCities[0].name
+                        binding.txtlocationprop2.text = resultList.location_properties.closestCities[1].name
+                        binding.txtlocationprop3.text = resultList.location_properties.closestCities[2].name
+                        binding.txtlocationprop4.text = resultList.location_properties.closestCities[3].name
+                        binding.txtlocationprop5.text = resultList.location_properties.closestCities[4].name
 
 
                         binding.imgLocation.setOnClickListener {
@@ -118,6 +125,7 @@ class DetailsFragment : Fragment() {
     private val blinkRunnable = object : Runnable {
         override fun run() {
             toggleVisibility(binding.txtDetailMag)
+            toggleVisibilityImage(binding.imgLocation)
             handler.postDelayed(this, BLINK_INTERVAL.toLong())
         }
     }
@@ -132,6 +140,8 @@ class DetailsFragment : Fragment() {
         handler.removeCallbacks(blinkRunnable)
         binding.txtDetailMag.visibility =
             View.VISIBLE // Ensure the TextView is visible when not blinking
+        binding.imgLocation.visibility =
+            View.VISIBLE
     }
 
     // Toggle the visibility of the TextView
@@ -142,6 +152,15 @@ class DetailsFragment : Fragment() {
             textView.visibility = View.VISIBLE
         }
     }
+    private fun toggleVisibilityImage(Image: ImageView) {
+        if (Image.visibility == View.VISIBLE) {
+            Image.visibility = View.INVISIBLE
+        } else {
+            Image.visibility = View.VISIBLE
+        }
+    }
+
 }
+
 
 private const val BLINK_INTERVAL = 500
