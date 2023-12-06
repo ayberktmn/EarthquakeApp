@@ -120,4 +120,6 @@ dependencies {
     implementation ("com.huawei.hms:maps:6.11.2.301")
     implementation ("com.huawei.agconnect:agconnect-core:1.9.1.300")
 
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.27")
+
 }
